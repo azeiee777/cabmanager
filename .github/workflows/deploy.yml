@@ -12,10 +12,12 @@ jobs:
       - name: Execute SSH Commands to Deploy
         uses: appleboy/ssh-action@master
         with:
+          # These 3 MUST be created as separate New Repository Secrets
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USERNAME }}
-          password: ${{ secrets.HOSTINGER_PASSWORD }}
           port: ${{ secrets.HOSTINGER_PORT }}
+          # Using the secret name you created in your screenshot
+          password: ${{ secrets.CABMANAGER_SECRET }}
           script: |
             cd domains/abdulajij.in/public_html/cabmanager
             git pull origin main
