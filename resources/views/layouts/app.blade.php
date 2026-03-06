@@ -7,6 +7,23 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>CabManager Elite</title>
 
+    <!-- Browser Tab Icons (Favicons) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon.ico">
+
+    <!-- PWA / Mobile Home Screen Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CabManager">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <!-- Link to Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/icon.svg">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -56,10 +73,13 @@
         <!-- ===================================== -->
         <aside class="hidden md:flex flex-col w-64 bg-gray-900 border-r border-gray-800 z-30 shadow-2xl">
             <div class="p-6 border-b border-gray-800 bg-black/20">
-                <h1
-                    class="text-2xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent">
-                    CabManager</h1>
-                <p class="text-xs text-gray-400 font-medium tracking-wider mt-1 cab-number-display">
+                <div class="flex items-center gap-3 mb-1">
+                    <img src="/favicon.svg" alt="Logo" class="w-8 h-8">
+                    <h1
+                        class="text-2xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent">
+                        CabManager</h1>
+                </div>
+                <p class="text-xs text-gray-400 font-medium tracking-wider cab-number-display">
                     {{ auth()->user()->cab_number ?? 'DL 1Z 9999' }}</p>
             </div>
 
@@ -86,7 +106,7 @@
                 </a>
             </nav>
 
-            <!-- User Info (Moved to the absolute bottom) -->
+            <!-- User Info -->
             <div class="px-6 py-4 border-t border-gray-800 mt-auto bg-black/20">
                 <div class="flex items-center gap-3">
                     <div
@@ -110,12 +130,15 @@
             <header
                 class="md:hidden pt-8 pb-4 px-6 bg-gradient-to-b from-black to-gray-900 sticky top-0 z-20 border-b border-gray-800">
                 <div class="flex justify-between items-center">
-                    <div>
-                        <h1
-                            class="text-2xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent">
-                            CabManager</h1>
-                        <p class="text-xs text-gray-400 font-medium tracking-wider mt-1 cab-number-display"
-                            id="headerCabNumber">{{ auth()->user()->cab_number ?? 'DL 1Z 9999' }}</p>
+                    <div class="flex items-center gap-3">
+                        <img src="/favicon.svg" alt="Logo" class="w-10 h-10">
+                        <div>
+                            <h1
+                                class="text-2xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent">
+                                CabManager</h1>
+                            <p class="text-xs text-gray-400 font-medium tracking-wider cab-number-display"
+                                id="headerCabNumber">{{ auth()->user()->cab_number ?? 'DL 1Z 9999' }}</p>
+                        </div>
                     </div>
                     <div
                         class="h-10 w-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center shadow-inner">
@@ -124,7 +147,7 @@
                 </div>
             </header>
 
-            <!-- Scrollable View (Constrained on Desktop for readability) -->
+            <!-- Scrollable View -->
             <main
                 class="flex-1 overflow-y-auto pb-24 md:pb-8 px-4 md:px-8 pt-4 md:pt-8 custom-scrollbar relative animate-in fade-in duration-300">
                 <div class="max-w-4xl mx-auto w-full">
@@ -160,7 +183,8 @@
                 </a>
                 <a href="{{ route('tolls.view') }}"
                     class="flex-1 flex flex-col items-center transition-all {{ request()->routeIs('tolls.view') ? 'text-amber-400 scale-110' : 'text-gray-500 hover:text-gray-300' }}">
-                    <i data-lucide="receipt" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Tolls</span>
+                    <i data-lucide="receipt" class="w-6 h-6 mb-1"></i><span
+                        class="text-[10px] font-medium">Tolls</span>
                 </a>
                 <a href="{{ route('settings.view') }}"
                     class="flex-1 flex flex-col items-center transition-all {{ request()->routeIs('settings.view') ? 'text-amber-400 scale-110' : 'text-gray-500 hover:text-gray-300' }}">

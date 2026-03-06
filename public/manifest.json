@@ -1,0 +1,18 @@
+{
+  "name": "CabManager Elite",
+  "short_name": "CabManager",
+  "description": "Premium financial tracking dashboard for professional cab drivers.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
