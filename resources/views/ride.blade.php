@@ -5,7 +5,8 @@
         <h2 class="text-xl font-semibold mb-6 text-gray-100" id="pageTitle">Add Income (Ride)</h2>
 
         <form id="apiRideForm" class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
+            <!-- Date and Fare: Stacked on mobile, 2 cols on desktop -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
                     <label class="text-xs font-medium text-gray-400">Date</label>
                     <input type="date" name="date" value="{{ date('Y-m-d') }}"
@@ -20,7 +21,8 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <!-- KM and Deadhead: Stacked on mobile, 2 cols on desktop -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
                     <label class="text-xs font-medium text-gray-400">Ride KM</label>
                     <input type="number" name="km" placeholder="Distance"
@@ -48,14 +50,15 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-800">
+            <!-- Tolls: Stacked on mobile, 2 cols on desktop to prevent label overlap -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gray-800">
                 <div class="space-y-1.5">
-                    <label class="text-xs font-medium text-gray-400">MCD Toll Collected (₹)</label>
+                    <label class="text-[11px] sm:text-xs font-medium text-gray-400">MCD Toll Collected (₹)</label>
                     <input type="number" name="mcd_toll" value="0"
                         class="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500">
                 </div>
                 <div class="space-y-1.5">
-                    <label class="text-xs font-medium text-gray-400">Paid Toll Collected (₹)</label>
+                    <label class="text-[11px] sm:text-xs font-medium text-gray-400">Paid Toll Collected (₹)</label>
                     <input type="number" name="paid_toll" value="0"
                         class="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500">
                 </div>
@@ -63,7 +66,7 @@
 
             <div class="pt-6">
                 <button type="submit" id="saveRideBtn"
-                    class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-3.5 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all active:scale-[0.98]">
+                    class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all active:scale-[0.98]">
                     Save Ride Details
                 </button>
             </div>
@@ -77,12 +80,10 @@
             const urlParams = new URLSearchParams(window.location.search);
             const editId = urlParams.get('edit');
 
-            // IF EDIT MODE: Load Data
             if (editId) {
                 $('#pageTitle').text('Edit Ride Details');
                 $('#saveRideBtn').text('Update Ride Details');
 
-                // Use Laravel URL helper
                 $.get(`{{ url('api/rides') }}/${editId}`, function(res) {
                     const r = res.ride;
                     $('input[name="date"]').val(r.date);
@@ -99,20 +100,15 @@
                 });
             }
 
-            // Handle Save or Update Submission
             $('#apiRideForm').submit(function(e) {
                 e.preventDefault();
                 const id = $(this).data('edit-id');
                 const url = id ? `{{ url('api/rides') }}/${id}` : "{{ route('api.rides.store') }}";
-
                 const btn = $('#saveRideBtn');
                 btn.text('Saving...').prop('disabled', true);
 
-                // Serialize form data and append _method=PUT if updating
                 let formData = $(this).serialize();
-                if (id) {
-                    formData += '&_method=PUT';
-                }
+                if (id) formData += '&_method=PUT';
 
                 $.post(url, formData)
                     .done(function(res) {
