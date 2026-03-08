@@ -126,7 +126,7 @@
                 $.post(url, formData)
                     .done(function(res) {
                         showAlert(res.message, 'success');
-                        setTimeout(() => window.location.href = "{{ route('dashboard.view') }}", 1000);
+                        setTimeout(() => window.location.href = "{{ route('dashboard.view') }}", 100);
                     })
                     .fail(function(err) {
                         showAlert(err.responseJSON.message || 'Error saving ride', 'error');

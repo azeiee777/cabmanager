@@ -36,7 +36,9 @@ jobs:
             
             # 5. Clear Caches & Old Sessions
             # Removing file sessions prevents 500 errors if you just switched to DB driver
-            rm -f storage/framework/sessions/* php artisan config:clear
+            rm -f storage/framework/sessions/*
+            
+            php artisan config:clear
             php artisan route:clear
             php artisan view:clear
             php artisan cache:clear

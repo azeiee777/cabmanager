@@ -25,193 +25,122 @@
             }
         }
     </script>
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #3f3f46;
-            border-radius: 4px;
-        }
-
-        .animate-drive {
-            animation: driveCar 4s linear infinite;
-        }
-
-        @keyframes driveCar {
-            0% {
-                transform: translateX(-60px);
-            }
-
-            100% {
-                transform: translateX(120vw);
-            }
-        }
-
-        @keyframes pulse-glow {
-
-            0%,
-            100% {
-                opacity: 0.5;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.8;
-                transform: scale(1.05);
-            }
-        }
-
-        .animate-pulse-glow {
-            animation: pulse-glow 3s ease-in-out infinite;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-950 text-gray-100 font-sans flex justify-center min-h-screen">
 
     <div class="w-full h-screen flex flex-col md:flex-row bg-gray-950 overflow-hidden relative">
 
-        <!-- LEFT SIDE: MARKETING VIEW -->
+        <!-- LEFT SIDE: MARKETING -->
         <div id="marketingView"
-            class="w-full md:w-1/2 lg:w-3/5 flex flex-col h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-gray-950 to-black overflow-y-auto custom-scrollbar relative z-10 transition-all duration-300">
-
-            <nav class="flex justify-between items-center p-6 md:p-10 relative z-10">
+            class="w-full md:w-1/2 lg:w-3/5 flex flex-col h-full bg-gray-950 relative z-10 transition-all duration-300">
+            <nav class="p-6 md:p-10 flex justify-between items-center">
                 <div class="flex items-center gap-2">
-                    <div class="bg-amber-500 p-1.5 rounded-lg text-gray-900">
-                        <i data-lucide="car" class="w-5 h-5" stroke-width="2.5"></i>
+                    <div class="bg-amber-500 p-1.5 rounded-lg text-gray-900"><i data-lucide="car" class="w-5 h-5"></i>
                     </div>
-                    <span class="font-bold text-xl tracking-wide text-white">Cab<span
-                            class="text-amber-500">Manager</span></span>
+                    <span class="font-bold text-xl text-white">Cab<span class="text-amber-500">Manager</span></span>
                 </div>
-                <button id="navLoginBtn"
-                    class="md:hidden text-sm font-semibold text-gray-300 hover:text-white transition-colors">
-                    Log In
-                </button>
+                <button onclick="openAuthView('login')" class="md:hidden text-sm font-semibold text-gray-300">Log
+                    In</button>
             </nav>
 
-            <div
-                class="px-6 md:px-12 pt-6 pb-10 flex flex-col items-center md:items-start text-center md:text-left relative z-10 my-auto">
-                <div
-                    class="absolute top-10 left-1/2 md:left-24 -translate-x-1/2 md:-translate-x-0 w-48 h-48 bg-amber-500/20 rounded-full blur-[80px] pointer-events-none animate-pulse-glow">
-                </div>
-
-                <div
-                    class="inline-flex items-center gap-1.5 bg-gray-800/60 border border-gray-700/50 rounded-full px-3 py-1 mb-6 backdrop-blur-sm shadow-lg">
-                    <i data-lucide="star" class="text-amber-500 w-3 h-3 fill-amber-500"></i>
-                    <span class="text-[10px] md:text-xs font-medium text-gray-300 uppercase tracking-wider">Rated #1 by
-                        Chauffeurs</span>
-                </div>
-
-                <h1
-                    class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-[1.1]">
-                    Maximize Earnings.<br />
-                    <span
-                        class="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-                        Minimize Hassle.
-                    </span>
-                </h1>
-
-                <p
-                    class="text-gray-400 text-sm sm:text-base md:text-lg max-w-[320px] md:max-w-[450px] mb-8 leading-relaxed">
-                    The all-in-one financial dashboard designed exclusively for professional cab drivers. Track tolls,
-                    deadheads, and actual net profit.
-                </p>
-
-                <button id="heroSignupBtn"
-                    class="md:hidden w-full px-8 py-4 bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold rounded-full shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-lg">
-                    Get Started for Free <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <div class="relative h-16 w-full overflow-hidden border-y border-gray-800 bg-gray-900/50 mt-auto">
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="w-full border-t-2 border-dashed border-gray-700"></div>
-                </div>
-                <div class="absolute bottom-4 animate-drive drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"><i
-                        data-lucide="car" class="text-amber-500 w-8 h-8 fill-amber-500/20"></i></div>
+            <div class="px-6 md:px-12 my-auto text-center md:text-left">
+                <h1 class="text-4xl sm:text-6xl font-black text-white mb-6">Maximize Earnings.<br /><span
+                        class="text-amber-500">Minimize Hassle.</span></h1>
+                <p class="text-gray-400 text-base md:text-lg max-w-md mb-8 mx-auto md:mx-0">Track tolls, deadheads, and
+                    actual net profit exclusively for professional cab drivers.</p>
+                <button onclick="openAuthView('signup')"
+                    class="md:hidden w-full bg-amber-500 text-gray-950 font-bold py-4 rounded-full text-lg">Get
+                    Started</button>
             </div>
         </div>
 
-        <!-- RIGHT SIDE: AUTH FORM VIEW -->
+        <!-- RIGHT SIDE: AUTH FORM -->
         <div id="authView"
-            class="hidden md:flex flex-col w-full md:w-1/2 lg:w-2/5 h-full absolute md:relative inset-0 z-50 md:z-20 bg-gray-950 md:bg-gray-900 md:border-l border-gray-800 overflow-y-auto custom-scrollbar shadow-2xl animate-in slide-in-from-bottom-4 md:animate-none">
+            class="hidden md:flex flex-col w-full md:w-1/2 lg:w-2/5 h-full absolute md:relative inset-0 z-50 bg-gray-900 md:border-l border-gray-800 overflow-y-auto">
 
-            <div
-                class="absolute top-0 inset-x-0 h-64 bg-gradient-to-b from-amber-500/10 to-transparent pointer-events-none hidden md:block">
-            </div>
+            <div class="p-8 md:p-12 flex flex-col justify-center min-h-full max-w-md mx-auto w-full">
 
-            <div class="p-8 md:p-12 relative z-10 flex flex-col justify-center h-full max-w-md mx-auto w-full my-auto">
+                <button onclick="closeAuthView()"
+                    class="md:hidden p-2 mb-6 bg-gray-800 rounded-full w-max text-gray-400"><i data-lucide="x"
+                        class="w-5 h-5"></i></button>
 
-                <button id="closeAuthBtn"
-                    class="md:hidden p-2 -ml-2 mb-6 bg-gray-900 rounded-full border border-gray-800 text-gray-400 hover:text-white transition-colors w-max shadow-lg">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2" id="authTitle">Join the Elite Fleet</h2>
-                <p class="text-gray-400 mb-8" id="authDesc">Start tracking your earnings like a pro in seconds.</p>
+                <!-- Default text is now set for Login -->
+                <h2 class="text-3xl font-bold text-white mb-2" id="authTitle">Welcome Back</h2>
+                <p class="text-gray-400 mb-8" id="authDesc">Sign in to access your dashboard.</p>
 
                 <div id="authError"
-                    class="hidden mb-6 p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-start gap-3">
-                    <i data-lucide="alert-circle" class="text-rose-500 shrink-0 mt-0.5 w-5 h-5"></i>
+                    class="hidden mb-6 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-start gap-3">
+                    <i data-lucide="alert-circle" class="text-rose-500 w-5 h-5 mt-0.5 shrink-0"></i>
                     <p class="text-sm text-rose-400 font-medium leading-tight" id="authErrorText"></p>
                 </div>
 
-                <form id="authForm" class="space-y-5">
-                    <div class="flex flex-col space-y-1.5 w-full">
-                        <label class="text-xs font-medium text-gray-400">Email or 10-Digit Mobile Number</label>
-                        <div class="relative flex items-center">
-                            <div class="absolute left-3 text-gray-500 pointer-events-none"><i data-lucide="user"
-                                    class="w-4 h-4"></i></div>
-                            <input type="text" id="identifier" placeholder="e.g. 9876543210 or driver@mail.com"
-                                class="w-full bg-gray-950 md:bg-gray-900 border border-gray-800 md:border-gray-700 text-gray-200 rounded-xl pl-10 pr-4 py-3.5 focus:outline-none focus:border-amber-500 transition-colors"
-                                required>
+                <form id="authForm" class="space-y-5" novalidate>
+                    <!-- Step 1: Identifier -->
+                    <div id="step-identifier" class="space-y-5">
+                        <div class="flex flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Email
+                                Address</label>
+                            <input type="email" id="identifier" placeholder="e.g. driver@mail.com"
+                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none">
                         </div>
+
+                        <!-- Login Password Field (Visible by default) -->
+                        <div id="loginPwdGroup" class="flex flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Password</label>
+                            <input type="password" id="login_password" placeholder="Your password"
+                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none">
+                        </div>
+
+                        <!-- Cab Number Field (Hidden by default) -->
+                        <div id="cabNumberGroup" class="hidden flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Cab Number
+                                (Optional)</label>
+                            <input type="text" id="cab_number" placeholder="DL01AB1234"
+                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none uppercase">
+                        </div>
+
+                        <!-- Main Button -->
+                        <button type="submit" id="btnRequestOtp"
+                            class="w-full bg-amber-500 text-gray-950 font-bold py-4 rounded-xl shadow-lg transition-all active:scale-95 text-lg">Sign
+                            In</button>
                     </div>
 
-                    <div id="cabNumberGroup" class="flex flex-col space-y-1.5 w-full">
-                        <label class="text-xs font-medium text-gray-400">Cab Number (Optional)</label>
-                        <div class="relative flex items-center">
-                            <div class="absolute left-3 text-gray-500 pointer-events-none"><i data-lucide="car"
-                                    class="w-4 h-4"></i></div>
-                            <input type="text" id="cab_number" placeholder="e.g. DL01AB1234 or 21BH1234A"
-                                class="w-full bg-gray-950 md:bg-gray-900 border border-gray-800 md:border-gray-700 text-gray-200 rounded-xl pl-10 pr-4 py-3.5 focus:outline-none focus:border-amber-500 transition-colors uppercase">
+                    <!-- Step 2: Password & OTP (Only used for Signup now) -->
+                    <div id="step-verification" class="hidden space-y-5 animate-in slide-in-from-right-4">
+                        <div class="bg-amber-500/5 p-4 rounded-xl border border-amber-500/20 mb-2">
+                            <p class="text-xs text-amber-500 font-bold uppercase mb-1">Verifying Identity</p>
+                            <p class="text-sm text-gray-300" id="verifyTargetDisplay"></p>
                         </div>
-                        <p class="text-[10px] text-gray-500">Supports standard formats and BH series without spaces.</p>
-                    </div>
-
-                    <div class="flex flex-col space-y-1.5 w-full">
-                        <label class="text-xs font-medium text-gray-400">Password</label>
-                        <div class="relative flex items-center">
-                            <div class="absolute left-3 text-gray-500 pointer-events-none"><i data-lucide="lock"
-                                    class="w-4 h-4"></i></div>
+                        <div class="flex flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Create
+                                Password</label>
                             <input type="password" id="password" placeholder="Min. 6 characters"
-                                class="w-full bg-gray-950 md:bg-gray-900 border border-gray-800 md:border-gray-700 text-gray-200 rounded-xl pl-10 pr-4 py-3.5 focus:outline-none focus:border-amber-500 transition-colors"
-                                required minlength="6">
+                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none">
                         </div>
+                        <div class="flex flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Enter 6-Digit
+                                OTP</label>
+                            <input type="text" id="otp" maxlength="6" placeholder="000000"
+                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none text-center text-2xl tracking-[0.5em] font-black">
+                        </div>
+                        <button type="submit" id="submitBtn"
+                            class="w-full bg-amber-500 text-gray-950 font-bold py-4 rounded-xl shadow-lg transition-all active:scale-95 text-lg">Verify
+                            & Create Account</button>
+                        <button type="button" onclick="resetFlow()"
+                            class="w-full text-xs text-gray-500 font-bold hover:text-gray-300">Change Email</button>
                     </div>
-
-                    <button type="submit" id="submitBtn"
-                        class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-4 rounded-xl mt-6 shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all active:scale-[0.98] text-lg">Create
-                        Free Account</button>
                 </form>
 
-                <div class="mt-8 text-center border-t border-gray-800 pt-6">
+                <div id="authToggleContainer" class="mt-8 text-center border-t border-gray-800 pt-6">
                     <p class="text-sm text-gray-400">
-                        <span id="toggleText">Already have an account?</span>
-                        <button type="button" id="toggleMode"
-                            class="text-amber-500 font-semibold hover:text-amber-400 transition-colors ml-1">Sign
-                            In</button>
+                        <span id="toggleText">Don't have an account?</span>
+                        <button type="button" onclick="toggleMode()" id="toggleModeBtn"
+                            class="text-amber-500 font-semibold ml-1">Sign Up</button>
                     </p>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -222,115 +151,147 @@
             }
         });
 
-        let isSignup = true;
+        // Start in Login mode by default
+        let isSignup = false;
 
-        // Auto-format Cab Number
-        $('#cab_number').on('input', function() {
-            let val = $(this).val().replace(/\s+/g, '').toUpperCase();
-            $(this).val(val);
-            $('#authError').addClass('hidden');
-        });
-
-        // Adaptive toggle
-        function openAuthView(mode) {
+        window.openAuthView = (mode) => {
             isSignup = mode === 'signup';
             if (window.innerWidth < 768) {
-                $('#marketingView').addClass('hidden');
+                $('#marketingView').hide();
                 $('#authView').removeClass('hidden').addClass('flex');
             }
-            updateAuthUI();
-        }
+            updateUI();
+        };
 
-        $('#navLoginBtn').click(() => openAuthView('login'));
-        $('#heroSignupBtn, #bottomSignupBtn').click(() => openAuthView('signup'));
+        window.closeAuthView = () => {
+            $('#authView').addClass('hidden');
+            $('#marketingView').show();
+        };
 
-        $('#closeAuthBtn').click(() => {
-            if (window.innerWidth < 768) {
-                $('#authView').addClass('hidden').removeClass('flex');
-                $('#marketingView').removeClass('hidden');
-            }
-            $('#authError').addClass('hidden');
-        });
-
-        $('#toggleMode').click(function() {
+        window.toggleMode = () => {
             isSignup = !isSignup;
-            updateAuthUI();
-        });
+            resetFlow();
+            updateUI();
+        };
 
-        function updateAuthUI() {
+        function updateUI() {
             $('#authTitle').text(isSignup ? 'Join the Elite Fleet' : 'Welcome Back');
-            $('#authDesc').text(isSignup ? 'Start tracking your earnings like a pro in seconds.' :
-                'Sign in to access your financial dashboard.');
-            $('#submitBtn').text(isSignup ? 'Create Free Account' : 'Sign In');
-            $('#cabNumberGroup').toggle(isSignup);
+            $('#authDesc').text(isSignup ? 'We\'ll send a code to verify your identity.' :
+                'Sign in to access your dashboard.');
+
+            if (isSignup) {
+                // Show Signup Fields
+                $('#cabNumberGroup').removeClass('hidden').addClass('flex');
+                $('#loginPwdGroup').addClass('hidden').removeClass('flex');
+                $('#btnRequestOtp').attr('type', 'button').text('Next: Get OTP');
+            } else {
+                // Show Login Fields
+                $('#cabNumberGroup').addClass('hidden').removeClass('flex');
+                $('#loginPwdGroup').removeClass('hidden').addClass('flex');
+                $('#btnRequestOtp').attr('type', 'submit').text('Sign In');
+
+                // Ensure we are back on step 1 if toggling from halfway through signup
+                $('#step-identifier').show();
+                $('#step-verification').hide();
+            }
+
             $('#toggleText').text(isSignup ? 'Already have an account?' : "Don't have an account?");
-            $('#toggleMode').text(isSignup ? 'Sign In' : 'Sign Up');
+            $('#toggleModeBtn').text(isSignup ? 'Sign In' : 'Sign Up');
+        }
+
+        window.resetFlow = () => {
+            $('#step-identifier').show();
+            $('#step-verification').hide();
+            $('#authToggleContainer').show();
             $('#authError').addClass('hidden');
-        }
+            $('#btnRequestOtp').prop('disabled', false).text(isSignup ? 'Next: Get OTP' : 'Sign In');
+        };
 
-        // Frontend Validation
-        function validateAuthInput() {
-            const identifier = $('#identifier').val();
-            const cabNumber = $('#cab_number').val();
+        const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const mobileRegex = /^[6-9]\d{9}$/; // Indian mobile numbers
-            const cabRegex = /^([A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4})|([0-9]{2}BH[0-9]{4}[A-Z]{1,2})$/;
-
-            if (!emailRegex.test(identifier) && !mobileRegex.test(identifier)) {
-                return "Please enter a valid email address or a 10-digit mobile number.";
+        // Main Button Click Handler (Intercepts clicks on "Next: Get OTP" button)
+        $('#btnRequestOtp').click(function(e) {
+            // IF LOGIN MODE: Let the form native submit handle it (it triggers the form.submit event below)
+            if (!isSignup) {
+                return; // Do nothing here, allow form submission to trigger
             }
 
-            if (isSignup && cabNumber && !cabRegex.test(cabNumber)) {
-                return "Please enter a valid Indian vehicle number (e.g., UP32AB1234 or 21BH1234A).";
-            }
-
-            return null; // Passes validation
-        }
-
-        $('#authForm').submit(function(e) {
+            // IF SIGNUP MODE: Prevent submission and do AJAX for OTP instead
             e.preventDefault();
 
-            const validationError = validateAuthInput();
-            if (validationError) {
-                $('#authErrorText').text(validationError);
-                $('#authError').removeClass('hidden');
-                return;
-            }
+            const identifier = $('#identifier').val().trim();
+            if (!identifier) return showError('Please enter your Email Address.');
+            if (!isValidEmail(identifier)) return showError('Please enter a valid email address.');
 
-            const btn = $('#submitBtn');
-            const originalText = btn.text();
-            btn.text('Processing...').prop('disabled', true);
+            const btn = $(this);
+            btn.text('Sending OTP...').prop('disabled', true);
+
+            $.post("{{ route('api.send-otp') }}", {
+                    identifier
+                })
+                .done(function(res) {
+                    $('#authError').addClass('hidden');
+                    $('#step-identifier').hide();
+                    $('#step-verification').removeClass('hidden').show();
+                    $('#authToggleContainer').hide();
+                    $('#verifyTargetDisplay').text(identifier);
+                })
+                .fail(err => showError(err.responseJSON.error || err.responseJSON.message || 'Failed to send OTP.'))
+                .always(() => btn.text('Next: Get OTP').prop('disabled', false));
+        });
+
+        // Form Submission Logic (Handles both Login and Final Registration step)
+        $('#authForm').submit(function(e) {
+            e.preventDefault(); // Stop page reload
 
             const url = isSignup ? "{{ route('api.register') }}" : "{{ route('api.login') }}";
-            const data = {
-                identifier: $('#identifier').val(),
-                password: $('#password').val(),
-                cab_number: $('#cab_number').val()
-            };
+            const identifier = $('#identifier').val().trim();
+
+            if (!identifier) return showError('Please enter your email.');
+            if (!isValidEmail(identifier)) return showError('Please enter a valid email.');
+
+            let data = {};
+
+            if (isSignup) {
+                const password = $('#password').val();
+                const otp = $('#otp').val();
+                if (!password || password.length < 6) return showError('Password must be at least 6 characters.');
+                if (!otp || otp.length !== 6) return showError('Please enter the 6-digit OTP.');
+
+                data = {
+                    identifier: identifier,
+                    password: password,
+                    otp: otp,
+                    cab_number: $('#cab_number').val()
+                };
+                $('#submitBtn').text('Processing...').prop('disabled', true);
+            } else {
+                const loginPassword = $('#login_password').val();
+                if (!loginPassword) return showError('Please enter your password.');
+
+                data = {
+                    identifier: identifier,
+                    password: loginPassword
+                };
+                $('#btnRequestOtp').text('Processing...').prop('disabled', true);
+            }
 
             $.post(url, data)
-                .done(function() {
-                    window.location.href = "{{ route('dashboard.view') }}";
-                })
-                .fail(function(err) {
-                    btn.text(originalText).prop('disabled', false);
-                    let errorMessage = 'Authentication failed.';
-
-                    if (err.responseJSON && err.responseJSON.errors) {
-                        errorMessage = Object.values(err.responseJSON.errors)[0][0];
-                    } else if (err.responseJSON && err.responseJSON.error) {
-                        errorMessage = err.responseJSON.error;
+                .done(() => window.location.href = "{{ route('dashboard.view') }}")
+                .fail(err => {
+                    showError(err.responseJSON.error || err.responseJSON.message || 'Authentication failed.');
+                    if (isSignup) {
+                        $('#submitBtn').text('Verify & Create Account').prop('disabled', false);
+                    } else {
+                        $('#btnRequestOtp').text('Sign In').prop('disabled', false);
                     }
-
-                    $('#authError').removeClass('hidden');
-                    $('#authErrorText').text(errorMessage);
                 });
         });
 
-        $('#identifier, #password').on('input', function() {
-            $('#authError').addClass('hidden');
-        });
+        function showError(msg) {
+            $('#authErrorText').text(msg);
+            $('#authError').removeClass('hidden');
+        }
     </script>
 </body>
 

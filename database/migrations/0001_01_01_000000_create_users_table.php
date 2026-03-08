@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('identifier')->unique(); // Used for Email or Mobile Number
+            $table->text('identifier'); // Changed to text to hold the long encrypted email
+            $table->string('identifier_hash')->nullable()->unique(); // Made nullable to prevent strict DB insert errors
             $table->string('password');
             $table->string('cab_number')->nullable()->default('DL 1Z 9999');
             $table->string('pin', 4)->default('1234');
@@ -21,7 +22,7 @@ return new class extends Migration {
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('identifier')->primary(); // Changed from email to match our users table
+            $table->string('identifier')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
