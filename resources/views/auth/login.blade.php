@@ -20,6 +20,28 @@
                             900: '#171717',
                             800: '#262626'
                         }
+                    },
+                    animation: {
+                        'cab-bounce': 'cab-bounce 0.4s alternate infinite ease-in-out',
+                        'cab-drive': 'cab-drive 5s linear infinite',
+                    },
+                    keyframes: {
+                        'cab-bounce': {
+                            '0%': {
+                                transform: 'translateY(0)'
+                            },
+                            '100%': {
+                                transform: 'translateY(-3px)'
+                            }
+                        },
+                        'cab-drive': {
+                            '0%': {
+                                left: '-200px'
+                            },
+                            '100%': {
+                                left: '100%'
+                            }
+                        }
                     }
                 }
             }
@@ -34,7 +56,7 @@
         <!-- LEFT SIDE: MARKETING -->
         <div id="marketingView"
             class="w-full md:w-1/2 lg:w-3/5 flex flex-col h-full bg-gray-950 relative z-10 transition-all duration-300">
-            <nav class="p-6 md:p-10 flex justify-between items-center">
+            <nav class="p-6 md:p-10 flex justify-between items-center relative z-20">
                 <div class="flex items-center gap-2">
                     <div class="bg-amber-500 p-1.5 rounded-lg text-gray-900"><i data-lucide="car" class="w-5 h-5"></i>
                     </div>
@@ -44,14 +66,54 @@
                     In</button>
             </nav>
 
-            <div class="px-6 md:px-12 my-auto text-center md:text-left">
+            <div class="px-6 md:px-12 my-auto text-center md:text-left relative z-20 pb-32 md:pb-0">
                 <h1 class="text-4xl sm:text-6xl font-black text-white mb-6">Maximize Earnings.<br /><span
                         class="text-amber-500">Minimize Hassle.</span></h1>
                 <p class="text-gray-400 text-base md:text-lg max-w-md mb-8 mx-auto md:mx-0">Track tolls, deadheads, and
                     actual net profit exclusively for professional cab drivers.</p>
                 <button onclick="openAuthView('signup')"
-                    class="md:hidden w-full bg-amber-500 text-gray-950 font-bold py-4 rounded-full text-lg">Get
+                    class="md:hidden w-full bg-amber-500 text-gray-950 font-bold py-4 rounded-full text-lg shadow-lg shadow-amber-500/20">Get
                     Started</button>
+            </div>
+
+            <!-- ANIMATED CAB & ROAD BACKGROUND -->
+            <div
+                class="absolute bottom-0 left-0 w-full h-48 pointer-events-none overflow-hidden z-10 opacity-60 md:opacity-100">
+                <!-- The Cab (Now drives across the screen and bounces) -->
+                <div class="absolute bottom-8 animate-cab-drive w-[140px]">
+                    <div class="animate-cab-bounce relative">
+                        <svg width="140" height="56" viewBox="0 0 140 56" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cab Body -->
+                            <path
+                                d="M18 24L30 6H100L118 24H135C137.761 24 140 26.2386 140 29V42C140 44.7614 137.761 47 135 47H122C122 51.9706 117.971 56 113 56C108.029 56 104 51.9706 104 47H36C36 51.9706 31.9706 56 27 56C22.0294 56 18 51.9706 18 47H5C2.23858 47 0 44.7614 0 42V29C0 26.2386 2.23858 24 5 24H18Z"
+                                fill="#F59E0B" />
+                            <!-- Windows -->
+                            <path d="M33 9H70V21H23L33 9Z" fill="#171717" />
+                            <path d="M76 9H96.5L106.5 21H76V9Z" fill="#171717" />
+                            <!-- Wheels -->
+                            <circle cx="27" cy="47" r="7" fill="#171717" stroke="#333"
+                                stroke-width="2" />
+                            <circle cx="113" cy="47" r="7" fill="#171717" stroke="#333"
+                                stroke-width="2" />
+                            <!-- Details (Headlight & Taxi Sign) -->
+                            <path d="M135 29C137.761 29 140 31.2386 140 34V37H135V29Z" fill="#FEF08A" />
+                            <rect x="55" y="0" width="30" height="6" rx="2" fill="#F59E0B" />
+                            <!-- Tail light -->
+                            <rect x="0" y="29" width="4" height="8" fill="#EF4444" />
+                        </svg>
+                        <!-- Speed lines / Exhaust -->
+                        <div class="absolute bottom-3 -left-12 w-8 h-1 bg-gray-600 rounded-full opacity-50"></div>
+                        <div class="absolute bottom-5 -left-16 w-6 h-1 bg-gray-600 rounded-full opacity-30"></div>
+                    </div>
+                </div>
+
+                <!-- The Road Base -->
+                <div class="absolute bottom-4 left-0 w-full h-1 bg-gray-800"></div>
+                <!-- The Static Dashed Lines -->
+                <div
+                    class="absolute bottom-4 left-0 w-full h-1 bg-[linear-gradient(90deg,transparent_0%,transparent_50%,#f59e0b_50%,#f59e0b_100%)] bg-[length:60px_4px] shadow-[0_0_10px_rgba(245,158,11,0.5)]">
+                </div>
             </div>
         </div>
 
@@ -62,10 +124,9 @@
             <div class="p-8 md:p-12 flex flex-col justify-center min-h-full max-w-md mx-auto w-full">
 
                 <button onclick="closeAuthView()"
-                    class="md:hidden p-2 mb-6 bg-gray-800 rounded-full w-max text-gray-400"><i data-lucide="x"
-                        class="w-5 h-5"></i></button>
+                    class="md:hidden p-2 mb-6 bg-gray-800 rounded-full w-max text-gray-400 hover:text-white transition-colors"><i
+                        data-lucide="arrow-left" class="w-5 h-5"></i></button>
 
-                <!-- Default text is now set for Login -->
                 <h2 class="text-3xl font-bold text-white mb-2" id="authTitle">Welcome Back</h2>
                 <p class="text-gray-400 mb-8" id="authDesc">Sign in to access your dashboard.</p>
 
@@ -136,7 +197,8 @@
                     <p class="text-sm text-gray-400">
                         <span id="toggleText">Don't have an account?</span>
                         <button type="button" onclick="toggleMode()" id="toggleModeBtn"
-                            class="text-amber-500 font-semibold ml-1">Sign Up</button>
+                            class="text-amber-500 font-semibold ml-1 hover:text-amber-400 transition-colors">Sign
+                            Up</button>
                     </p>
                 </div>
             </div>
@@ -190,7 +252,6 @@
                 $('#loginPwdGroup').removeClass('hidden').addClass('flex');
                 $('#btnRequestOtp').attr('type', 'submit').text('Sign In');
 
-                // Ensure we are back on step 1 if toggling from halfway through signup
                 $('#step-identifier').show();
                 $('#step-verification').hide();
             }
@@ -209,14 +270,9 @@
 
         const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-        // Main Button Click Handler (Intercepts clicks on "Next: Get OTP" button)
         $('#btnRequestOtp').click(function(e) {
-            // IF LOGIN MODE: Let the form native submit handle it (it triggers the form.submit event below)
-            if (!isSignup) {
-                return; // Do nothing here, allow form submission to trigger
-            }
+            if (!isSignup) return;
 
-            // IF SIGNUP MODE: Prevent submission and do AJAX for OTP instead
             e.preventDefault();
 
             const identifier = $('#identifier').val().trim();
@@ -240,9 +296,8 @@
                 .always(() => btn.text('Next: Get OTP').prop('disabled', false));
         });
 
-        // Form Submission Logic (Handles both Login and Final Registration step)
         $('#authForm').submit(function(e) {
-            e.preventDefault(); // Stop page reload
+            e.preventDefault();
 
             const url = isSignup ? "{{ route('api.register') }}" : "{{ route('api.login') }}";
             const identifier = $('#identifier').val().trim();

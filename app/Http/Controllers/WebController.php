@@ -32,6 +32,11 @@ class WebController extends Controller
         return view('tolls');
     }
 
+    public function history()
+    {
+        return view('history');
+    }
+
     public function settings()
     {
         return view('settings');
