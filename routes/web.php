@@ -33,6 +33,8 @@ Route::prefix('api')->name('api.')->group(function () {
     
     // Auth Routes
     Route::post('/send-otp', [AuthController::class, 'sendOtp'])->name('send-otp');
+    Route::post('/forgot-password/send-otp', [AuthController::class, 'sendPasswordResetOtp'])->name('password.send-reset-otp');
+    Route::post('/forgot-password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     

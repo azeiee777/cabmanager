@@ -36,8 +36,8 @@
 
 <body>
     <div class="card">
-        <h2 style="color: #f59e0b;">CabManager Elite</h2>
-        <p>Use the code below to verify your account and join the fleet.</p>
+        <h2 style="color: #f59e0b;">{{ $headline }}</h2>
+        <p>{{ $bodyText }}</p>
         <div class="code">{{ $code }}</div>
         <p>This code will expire in 10 minutes.</p>
         <div class="footer">If you didn't request this, please ignore this email.</div>

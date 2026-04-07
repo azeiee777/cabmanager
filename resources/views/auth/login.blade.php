@@ -146,11 +146,29 @@
                                 class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none">
                         </div>
 
+                        <div id="forgotPasswordHelp"
+                            class="hidden rounded-xl border border-sky-500/20 bg-sky-500/5 px-4 py-3 text-sm text-sky-200">
+                            Enter your email address and we will send a 6-digit OTP to reset your password.
+                        </div>
+
                         <!-- Login Password Field (Visible by default) -->
                         <div id="loginPwdGroup" class="flex flex-col space-y-1.5">
-                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Password</label>
-                            <input type="password" id="login_password" placeholder="Your password"
-                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none">
+                            <div class="flex items-center justify-between gap-3">
+                                <label
+                                    class="text-xs font-medium text-gray-400 uppercase tracking-widest">Password</label>
+                                <button type="button" onclick="openForgotPassword()"
+                                    class="text-xs font-semibold text-amber-500 hover:text-amber-400 transition-colors">
+                                    Forgot Password?
+                                </button>
+                            </div>
+                            <div class="relative">
+                                <input type="password" id="login_password" placeholder="Your password"
+                                    class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 pr-20 focus:border-amber-500 outline-none">
+                                <button type="button" data-password-toggle data-target="#login_password"
+                                    class="absolute inset-y-0 right-3 flex items-center text-xs font-semibold text-gray-400 hover:text-amber-400 transition-colors">
+                                    Show
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Cab Number Field (Hidden by default) -->
@@ -176,8 +194,14 @@
                         <div class="flex flex-col space-y-1.5">
                             <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Create
                                 Password</label>
-                            <input type="password" id="password" placeholder="Min. 6 characters"
-                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none">
+                            <div class="relative">
+                                <input type="password" id="password" placeholder="Min. 6 characters"
+                                    class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 pr-20 focus:border-amber-500 outline-none">
+                                <button type="button" data-password-toggle data-target="#password"
+                                    class="absolute inset-y-0 right-3 flex items-center text-xs font-semibold text-gray-400 hover:text-amber-400 transition-colors">
+                                    Show
+                                </button>
+                            </div>
                         </div>
                         <div class="flex flex-col space-y-1.5">
                             <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Enter 6-Digit
@@ -191,12 +215,43 @@
                         <button type="button" onclick="resetFlow()"
                             class="w-full text-xs text-gray-500 font-bold hover:text-gray-300">Change Email</button>
                     </div>
+
+                    <div id="step-reset" class="hidden space-y-5 animate-in slide-in-from-right-4">
+                        <div class="bg-amber-500/5 p-4 rounded-xl border border-amber-500/20 mb-2">
+                            <p class="text-xs text-amber-500 font-bold uppercase mb-1">Resetting Password</p>
+                            <p class="text-sm text-gray-300" id="resetTargetDisplay"></p>
+                        </div>
+                        <div class="flex flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">New
+                                Password</label>
+                            <div class="relative">
+                                <input type="password" id="reset_password" placeholder="Min. 6 characters"
+                                    class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 pr-20 focus:border-amber-500 outline-none">
+                                <button type="button" data-password-toggle data-target="#reset_password"
+                                    class="absolute inset-y-0 right-3 flex items-center text-xs font-semibold text-gray-400 hover:text-amber-400 transition-colors">
+                                    Show
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-1.5">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-widest">Enter 6-Digit
+                                OTP</label>
+                            <input type="text" id="reset_otp" maxlength="6" placeholder="000000"
+                                class="w-full bg-gray-950 border border-gray-800 text-gray-200 rounded-xl px-4 py-3.5 focus:border-amber-500 outline-none text-center text-2xl tracking-[0.5em] font-black">
+                        </div>
+                        <button type="submit" id="resetPasswordBtn"
+                            class="w-full bg-amber-500 text-gray-950 font-bold py-4 rounded-xl shadow-lg transition-all active:scale-95 text-lg">
+                            Reset Password
+                        </button>
+                        <button type="button" onclick="resetFlow()"
+                            class="w-full text-xs text-gray-500 font-bold hover:text-gray-300">Change Email</button>
+                    </div>
                 </form>
 
                 <div id="authToggleContainer" class="mt-8 text-center border-t border-gray-800 pt-6">
                     <p class="text-sm text-gray-400">
                         <span id="toggleText">Don't have an account?</span>
-                        <button type="button" onclick="toggleMode()" id="toggleModeBtn"
+                        <button type="button" onclick="handleFooterAction()" id="toggleModeBtn"
                             class="text-amber-500 font-semibold ml-1 hover:text-amber-400 transition-colors">Sign
                             Up</button>
                     </p>
@@ -213,11 +268,46 @@
             }
         });
 
-        // Start in Login mode by default
         let isSignup = false;
+        let isForgotPassword = false;
+
+        function currentMode() {
+            if (isForgotPassword) {
+                return 'forgot';
+            }
+
+            return isSignup ? 'signup' : 'login';
+        }
+
+        function primaryButtonLabel() {
+            const mode = currentMode();
+
+            if (mode === 'signup') {
+                return 'Next: Get OTP';
+            }
+
+            if (mode === 'forgot') {
+                return 'Send Reset OTP';
+            }
+
+            return 'Sign In';
+        }
+
+        function resetStepPanels() {
+            $('#step-identifier').show();
+            $('#step-verification, #step-reset').hide().addClass('hidden');
+            $('#authToggleContainer').show();
+            $('#authError').addClass('hidden');
+            $('#btnRequestOtp').prop('disabled', false).text(primaryButtonLabel());
+            $('#submitBtn').prop('disabled', false).text('Verify & Create Account');
+            $('#resetPasswordBtn').prop('disabled', false).text('Reset Password');
+            $('#password, #otp, #reset_password, #reset_otp').val('');
+        }
 
         window.openAuthView = (mode) => {
             isSignup = mode === 'signup';
+            isForgotPassword = false;
+            resetStepPanels();
             if (window.innerWidth < 768) {
                 $('#marketingView').hide();
                 $('#authView').removeClass('hidden').addClass('flex');
@@ -230,48 +320,84 @@
             $('#marketingView').show();
         };
 
-        window.toggleMode = () => {
-            isSignup = !isSignup;
-            resetFlow();
+        window.handleFooterAction = () => {
+            if (isSignup || isForgotPassword) {
+                isSignup = false;
+                isForgotPassword = false;
+            } else {
+                isSignup = true;
+                isForgotPassword = false;
+            }
+
+            resetStepPanels();
+            updateUI();
+        };
+
+        window.openForgotPassword = () => {
+            isSignup = false;
+            isForgotPassword = true;
+            resetStepPanels();
             updateUI();
         };
 
         function updateUI() {
-            $('#authTitle').text(isSignup ? 'Join the Elite Fleet' : 'Welcome Back');
-            $('#authDesc').text(isSignup ? 'We\'ll send a code to verify your identity.' :
+            const mode = currentMode();
+            const loginMode = mode === 'login';
+            const signupMode = mode === 'signup';
+            const forgotMode = mode === 'forgot';
+
+            $('#authTitle').text(signupMode ? 'Join the Elite Fleet' : forgotMode ? 'Forgot Password' :
+                'Welcome Back');
+            $('#authDesc').text(signupMode ? 'We\'ll send a code to verify your identity.' :
+                forgotMode ? 'Enter your email to receive a password reset code.' :
                 'Sign in to access your dashboard.');
 
-            if (isSignup) {
-                // Show Signup Fields
+            if (signupMode) {
                 $('#cabNumberGroup').removeClass('hidden').addClass('flex');
-                $('#loginPwdGroup').addClass('hidden').removeClass('flex');
-                $('#btnRequestOtp').attr('type', 'button').text('Next: Get OTP');
             } else {
-                // Show Login Fields
                 $('#cabNumberGroup').addClass('hidden').removeClass('flex');
-                $('#loginPwdGroup').removeClass('hidden').addClass('flex');
-                $('#btnRequestOtp').attr('type', 'submit').text('Sign In');
-
-                $('#step-identifier').show();
-                $('#step-verification').hide();
             }
 
-            $('#toggleText').text(isSignup ? 'Already have an account?' : "Don't have an account?");
-            $('#toggleModeBtn').text(isSignup ? 'Sign In' : 'Sign Up');
+            if (loginMode) {
+                $('#loginPwdGroup').removeClass('hidden').addClass('flex');
+            } else {
+                $('#loginPwdGroup').addClass('hidden').removeClass('flex');
+            }
+
+            $('#forgotPasswordHelp').toggleClass('hidden', !forgotMode);
+            $('#btnRequestOtp').attr('type', loginMode ? 'submit' : 'button').text(primaryButtonLabel());
+
+            if (forgotMode) {
+                $('#toggleText').text('Remember your password?');
+                $('#toggleModeBtn').text('Sign In');
+            } else {
+                $('#toggleText').text(signupMode ? 'Already have an account?' : "Don't have an account?");
+                $('#toggleModeBtn').text(signupMode ? 'Sign In' : 'Sign Up');
+            }
         }
 
         window.resetFlow = () => {
-            $('#step-identifier').show();
-            $('#step-verification').hide();
-            $('#authToggleContainer').show();
-            $('#authError').addClass('hidden');
-            $('#btnRequestOtp').prop('disabled', false).text(isSignup ? 'Next: Get OTP' : 'Sign In');
+            resetStepPanels();
+            updateUI();
         };
+
+        $(document).on('click', '[data-password-toggle]', function() {
+            const toggle = $(this);
+            const input = $(toggle.data('target'));
+            const currentlyVisible = input.attr('type') === 'text';
+
+            input.attr('type', currentlyVisible ? 'password' : 'text');
+            toggle.text(currentlyVisible ? 'Show' : 'Hide');
+        });
 
         const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
         $('#btnRequestOtp').click(function(e) {
-            if (!isSignup) return;
+            const mode = currentMode();
+
+            if (mode === 'login') {
+                return;
+            }
 
             e.preventDefault();
 
@@ -280,63 +406,99 @@
             if (!isValidEmail(identifier)) return showError('Please enter a valid email address.');
 
             const btn = $(this);
-            btn.text('Sending OTP...').prop('disabled', true);
+            const url = mode === 'signup' ? "{{ route('api.send-otp') }}" :
+                "{{ route('api.password.send-reset-otp') }}";
+            btn.text(mode === 'signup' ? 'Sending OTP...' : 'Sending Reset OTP...').prop('disabled', true);
 
-            $.post("{{ route('api.send-otp') }}", {
+            $.post(url, {
                     identifier
                 })
-                .done(function(res) {
+                .done(function() {
                     $('#authError').addClass('hidden');
                     $('#step-identifier').hide();
-                    $('#step-verification').removeClass('hidden').show();
                     $('#authToggleContainer').hide();
-                    $('#verifyTargetDisplay').text(identifier);
+
+                    if (mode === 'signup') {
+                        $('#step-verification').removeClass('hidden').show();
+                        $('#verifyTargetDisplay').text(identifier);
+                    } else {
+                        $('#step-reset').removeClass('hidden').show();
+                        $('#resetTargetDisplay').text(identifier);
+                    }
                 })
                 .fail(err => showError(err.responseJSON.error || err.responseJSON.message || 'Failed to send OTP.'))
-                .always(() => btn.text('Next: Get OTP').prop('disabled', false));
+                .always(() => btn.text(primaryButtonLabel()).prop('disabled', false));
         });
 
         $('#authForm').submit(function(e) {
             e.preventDefault();
 
-            const url = isSignup ? "{{ route('api.register') }}" : "{{ route('api.login') }}";
+            const mode = currentMode();
             const identifier = $('#identifier').val().trim();
 
             if (!identifier) return showError('Please enter your email.');
             if (!isValidEmail(identifier)) return showError('Please enter a valid email.');
 
             let data = {};
+            let url = '';
+            let loadingButton = null;
 
-            if (isSignup) {
+            if (mode === 'signup') {
                 const password = $('#password').val();
                 const otp = $('#otp').val();
                 if (!password || password.length < 6) return showError('Password must be at least 6 characters.');
                 if (!otp || otp.length !== 6) return showError('Please enter the 6-digit OTP.');
 
+                url = "{{ route('api.register') }}";
                 data = {
                     identifier: identifier,
                     password: password,
                     otp: otp,
                     cab_number: $('#cab_number').val()
                 };
-                $('#submitBtn').text('Processing...').prop('disabled', true);
+                loadingButton = $('#submitBtn');
+                loadingButton.text('Processing...').prop('disabled', true);
+            } else if (mode === 'forgot') {
+                const resetPassword = $('#reset_password').val();
+                const resetOtp = $('#reset_otp').val();
+
+                if (!resetPassword || resetPassword.length < 6) {
+                    return showError('New password must be at least 6 characters.');
+                }
+
+                if (!resetOtp || resetOtp.length !== 6) {
+                    return showError('Please enter the 6-digit OTP.');
+                }
+
+                url = "{{ route('api.password.reset') }}";
+                data = {
+                    identifier: identifier,
+                    password: resetPassword,
+                    otp: resetOtp
+                };
+                loadingButton = $('#resetPasswordBtn');
+                loadingButton.text('Resetting...').prop('disabled', true);
             } else {
                 const loginPassword = $('#login_password').val();
                 if (!loginPassword) return showError('Please enter your password.');
 
+                url = "{{ route('api.login') }}";
                 data = {
                     identifier: identifier,
                     password: loginPassword
                 };
-                $('#btnRequestOtp').text('Processing...').prop('disabled', true);
+                loadingButton = $('#btnRequestOtp');
+                loadingButton.text('Processing...').prop('disabled', true);
             }
 
             $.post(url, data)
                 .done(() => window.location.href = "{{ route('dashboard.view') }}")
                 .fail(err => {
                     showError(err.responseJSON.error || err.responseJSON.message || 'Authentication failed.');
-                    if (isSignup) {
+                    if (mode === 'signup') {
                         $('#submitBtn').text('Verify & Create Account').prop('disabled', false);
+                    } else if (mode === 'forgot') {
+                        $('#resetPasswordBtn').text('Reset Password').prop('disabled', false);
                     } else {
                         $('#btnRequestOtp').text('Sign In').prop('disabled', false);
                     }
@@ -347,6 +509,8 @@
             $('#authErrorText').text(msg);
             $('#authError').removeClass('hidden');
         }
+
+        updateUI();
     </script>
 </body>
 

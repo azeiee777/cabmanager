@@ -21,6 +21,29 @@ class AuthController extends Controller
         return hash_hmac('sha256', strtolower(trim($email)), config('app.key'));
     }
 
+    private function normalizeEmail(string $email): string
+    {
+        return strtolower(trim($email));
+    }
+
+    private function storeOtpCode(string $email, string $emailHash, int $code): void
+    {
+        OtpVerification::updateOrCreate(
+            ['identifier_hash' => $emailHash],
+            [
+                'identifier' => $email,
+                'code' => Hash::make($code),
+                'expires_at' => Carbon::now()->addMinutes(10),
+                'verified' => false,
+            ]
+        );
+    }
+
+    private function sendOtpMail(string $email, int $code, string $purpose = 'signup'): void
+    {
+        Mail::to($email)->send(new OtpMail($code, $purpose));
+    }
+
     /**
      * Step 1: Send OTP (Email Only)
      */
@@ -33,7 +56,7 @@ class AuthController extends Controller
             'identifier.email' => 'Please provide a valid email address. Phone numbers are disabled.',
         ]);
 
-        $email = strtolower(trim($request->identifier));
+        $email = $this->normalizeEmail($request->identifier);
         $emailHash = $this->getEmailHash($email);
         
         // CHECK: If user already exists, prevent OTP and return "email already taken"
@@ -42,20 +65,42 @@ class AuthController extends Controller
         }
 
         $code = rand(100000, 999999);
-
-        OtpVerification::updateOrCreate(
-            ['identifier_hash' => $emailHash],
-            [
-                'identifier' => $email, // Laravel model cast will automatically encrypt this!
-                'code' => Hash::make($code),
-                'expires_at' => Carbon::now()->addMinutes(10),
-                'verified' => false,
-            ]
-        );
+        $this->storeOtpCode($email, $emailHash, $code);
 
         try {
-            Mail::to($email)->send(new OtpMail($code));
+            $this->sendOtpMail($email, $code, 'signup');
             return response()->json(['message' => 'OTP sent successfully to ' . $email]);
+        } catch (\Exception $e) {
+            Log::error('SMTP Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Mail server error. Please check your SMTP settings.'], 500);
+        }
+    }
+
+    /**
+     * Step 1: Send password reset OTP to existing users
+     */
+    public function sendPasswordResetOtp(Request $request)
+    {
+        $request->validate([
+            'identifier' => 'required|email',
+        ], [
+            'identifier.required' => 'Email address is required.',
+            'identifier.email' => 'Please provide a valid email address.',
+        ]);
+
+        $email = $this->normalizeEmail($request->identifier);
+        $emailHash = $this->getEmailHash($email);
+
+        if (!User::where('identifier_hash', $emailHash)->exists()) {
+            return response()->json(['error' => 'No account found with this email address.'], 422);
+        }
+
+        $code = rand(100000, 999999);
+        $this->storeOtpCode($email, $emailHash, $code);
+
+        try {
+            $this->sendOtpMail($email, $code, 'password-reset');
+            return response()->json(['message' => 'Password reset OTP sent successfully to ' . $email]);
         } catch (\Exception $e) {
             Log::error('SMTP Error: ' . $e->getMessage());
             return response()->json(['error' => 'Mail server error. Please check your SMTP settings.'], 500);
@@ -74,7 +119,7 @@ class AuthController extends Controller
             'cab_number' => 'nullable|string'
         ]);
 
-        $email = strtolower(trim($request->identifier));
+        $email = $this->normalizeEmail($request->identifier);
         $emailHash = $this->getEmailHash($email);
 
         // Double check during final registration step just in case
@@ -104,6 +149,44 @@ class AuthController extends Controller
     }
 
     /**
+     * Reset password with OTP
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'identifier' => 'required|email',
+            'password' => 'required|min:6',
+            'otp' => 'required|digits:6',
+        ]);
+
+        $email = $this->normalizeEmail($request->identifier);
+        $emailHash = $this->getEmailHash($email);
+        $user = User::where('identifier_hash', $emailHash)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'No account found with this email address.'], 422);
+        }
+
+        $otpRecord = OtpVerification::where('identifier_hash', $emailHash)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$otpRecord || !Hash::check($request->otp, $otpRecord->code)) {
+            return response()->json(['error' => 'Invalid or expired OTP.'], 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        $otpRecord->delete();
+
+        Auth::login($user, true);
+
+        return response()->json(['message' => 'Password reset successful', 'user' => $user]);
+    }
+
+    /**
      * Standard Login
      */
     public function login(Request $request) 
@@ -113,7 +196,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $email = strtolower(trim($request->identifier));
+        $email = $this->normalizeEmail($request->identifier);
         $emailHash = $this->getEmailHash($email);
 
         $user = User::where('identifier_hash', $emailHash)->first();
