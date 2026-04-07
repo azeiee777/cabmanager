@@ -102,8 +102,8 @@
 
                 $.post(url, formData)
                     .done(function(res) {
-                        showAlert(res.message, 'success');
-                        setTimeout(() => window.location.href = "{{ route('dashboard.view') }}", 100);
+                        persistAlert(res.message, 'success');
+                        window.location.replace("{{ route('dashboard.view') }}");
                     })
                     .fail(function(err) {
                         showAlert(err.responseJSON.message || 'Error saving expense', 'error');

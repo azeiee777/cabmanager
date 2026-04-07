@@ -190,6 +190,33 @@
             lucide.createIcons();
             setTimeout(() => box.addClass('hidden'), 3000);
         }
+
+        function persistAlert(message, type = 'success') {
+            sessionStorage.setItem('cabmanager-alert', JSON.stringify({
+                message,
+                type
+            }));
+        }
+
+        $(function() {
+            const storedAlert = sessionStorage.getItem('cabmanager-alert');
+
+            if (!storedAlert) {
+                return;
+            }
+
+            sessionStorage.removeItem('cabmanager-alert');
+
+            try {
+                const alert = JSON.parse(storedAlert);
+
+                if (alert.message) {
+                    showAlert(alert.message, alert.type || 'success');
+                }
+            } catch (error) {
+                console.error('Failed to restore saved alert.', error);
+            }
+        });
     </script>
     @stack('scripts')
 </body>
